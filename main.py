@@ -18,9 +18,6 @@ if __name__ == '__main__':
     parser.add_argument('--load_log', '-l',
                         default=None,
                         help='optimizer for trained model')
-    parser.add_argument('--num_of_category', '-noc', type=int,
-                        default=2,
-                        help='number of categories')
     parser.add_argument('--save_path', '-p',
                         default='./',
                         help='model and optimizer will be saved every epoch')
@@ -56,10 +53,9 @@ if __name__ == '__main__':
     lr = args.pop('lr')
     k = args.pop('k')
     N = args.pop('N')
-    num_of_category = args.pop('num_of_category')
 
     print('generating model')
-    model = wide_residual_net.WideResidualNetwork(num_of_category, block_num=3, out_channels=(16 * k, 32 * k, 64 * k), N=(int(N / 3.), int(N / 3.), int(N / 3.)))
+    model = wide_residual_net.WideResidualNetwork(10, block_num=3, out_channels=(16 * k, 32 * k, 64 * k), N=(int(N / 3.), int(N / 3.), int(N / 3.)))
     print('Done')
     optimizer = nutszebra_optimizer.OptimizerWideRes(model, lr=lr)
     args['model'] = model
