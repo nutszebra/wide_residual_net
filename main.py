@@ -18,9 +18,6 @@ if __name__ == '__main__':
     parser.add_argument('--load_log', '-l',
                         default=None,
                         help='optimizer for trained model')
-    parser.add_argument('--load_data', '-ld',
-                        default='./',
-                        help='dataset to load')
     parser.add_argument('--num_of_category', '-noc', type=int,
                         default=2,
                         help='number of categories')
