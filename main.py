@@ -25,7 +25,7 @@ if __name__ == '__main__':
                         default='./',
                         help='model and optimizer will be saved every epoch')
     parser.add_argument('--epoch', '-e', type=int,
-                        default=300,
+                        default=200,
                         help='maximum epoch')
     parser.add_argument('--batch', '-b', type=int,
                         default=128,
@@ -49,7 +49,7 @@ if __name__ == '__main__':
                         default=8,
                         help='width hyperparameter')
     parser.add_argument('--N', '-n', type=int,
-                        default=40,
+                        default=16,
                         help='width hyperparameter')
 
     args = parser.parse_args().__dict__
