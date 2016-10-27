@@ -78,7 +78,7 @@ class WideResidualNetwork(nutszebra_chainer.Model):
     def __init__(self, category_num, block_num=3, out_channels=(16 * 4, 32 * 4, 64 * 4), N=(13, 13, 13)):
         super(WideResidualNetwork, self).__init__()
         # conv
-        modules = [('conv1', L.Convolution2D(3, 16, 3, 1, 1))]
+        modules = [('conv1', L.Convolution2D(3, 16, 7, 2, 3))]
         in_channel = 16
         for i, out_channel, n in six.moves.zip(six.moves.range(1, block_num + 1), out_channels, N):
             modules.append(('wide_res_block{}'.format(i), WideResBlock(in_channel, out_channel, n=n)))
