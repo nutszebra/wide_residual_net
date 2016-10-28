@@ -17,12 +17,16 @@ Train: Pictures are randomly resized in the range of [28, 36], then 26x26 patche
 Test: Pictures are randomly resized to 32x32, then they are normalized locally. Single image test is used to calculate total accuracy.  
 
 # Cifar10 result
+In WRN [[1]][Paper], ZCA whitening is used for preprocessing. I assume that 0.86% total accuracy difference between my implementation and [[1]][Paper] is caused by ZCA whitening.
 
 | network           | depth | k  | total accuracy (%) |
 |:------------------|-------|----|-------------------:|
 | WRN [[1]][Paper]  | 16    | 8  | 95.19              |
-| my implementation | 16    | 8  | soon               |
+| my implementation | 16    | 8  | 94.33              |
 | WRN [[1]][Paper]  | 28    | 10 | 95.83              |
+
+<img src="https://github.com/nutszebra/wide_residual_net/blob/master/img/loss.jpg" alt="loss" title="loss">
+<img src="https://github.com/nutszebra/wide_residual_net/blob/master/img/accuracy.jpg" alt="total accuracy" title="total accuracy">
 
 # References
 Wide Residual Networks [[1]][Paper]
