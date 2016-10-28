@@ -8,7 +8,7 @@ Implementation of Wide Residual Networks (WRN) by chainer
     git clone https://github.com/nutszebra/trainer.git
 
 # How to run
-    python main.py -p ./ -e 200 -b 128 -g 0 -s 1 -trb 4 -teb 4 -lr 0.1 -k 8 -n 40
+    python main.py -p ./ -e 200 -b 128 -g 0 -s 1 -trb 4 -teb 4 -lr 0.1 -k 8 -n 16
 
 # Details about my implementation
 All hyperparameters and network architecture are the same as in [[1]][Paper] except for data-augmentation.  
