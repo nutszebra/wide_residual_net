@@ -29,10 +29,10 @@ class BN_ReLU_Conv(nutszebra_chainer.Model):
 
 class WideResBlock(nutszebra_chainer.Model):
 
-    def __init__(self, in_channel, out_channel, n=13):
+    def __init__(self, in_channel, out_channel, n=13, stride_at_first_layer=2):
         super(WideResBlock, self).__init__()
         modules = []
-        modules += [('bn_relu_conv1_1', BN_ReLU_Conv(in_channel, out_channel))]
+        modules += [('bn_relu_conv1_1', BN_ReLU_Conv(in_channel, out_channel, 3, stride_at_first_layer, 1))]
         modules += [('bn_relu_conv2_1', BN_ReLU_Conv(out_channel, out_channel))]
         for i in six.moves.range(2, n + 1):
             modules.append(('bn_relu_conv1_{}'.format(i), BN_ReLU_Conv(out_channel, out_channel)))
@@ -40,7 +40,10 @@ class WideResBlock(nutszebra_chainer.Model):
         # register layers
         [self.add_link(*link) for link in modules]
         self.modules = modules
+        self.in_channel = in_channel
+        self.out_channel = out_channel
         self.n = n
+        self.stride_at_first_layer = stride_at_first_layer
 
     def weight_initialization(self):
         for i in six.moves.range(1, self.n + 1):
@@ -48,18 +51,25 @@ class WideResBlock(nutszebra_chainer.Model):
             self['bn_relu_conv2_{}'.format(i)].weight_initialization()
 
     @staticmethod
-    def concatenate_zero_pad(x, h):
+    def concatenate_zero_pad(x, h_shape, volatile, h_type):
         _, x_channel, _, _ = x.data.shape
-        batch, h_channel, h_y, h_x = h.data.shape
-        pad = chainer.Variable(np.zeros((batch, h_channel - x_channel, h_y, h_x), dtype=np.float32), volatile=h.volatile)
-        if type(h.data) is not np.ndarray:
+        batch, h_channel, h_y, h_x = h_shape
+        if x_channel == h_channel:
+            return x
+        pad = chainer.Variable(np.zeros((batch, h_channel - x_channel, h_y, h_x), dtype=np.float32), volatile=volatile)
+        if h_type is not np.ndarray:
             pad.to_gpu()
         return F.concat((x, pad))
+
+    def maybe_pooling(self, x):
+        if self.stride_at_first_layer == 2:
+            return F.average_pooling_2d(x, 3, 2, 1)
+        return x
 
     def __call__(self, x, train=False):
         h = self['bn_relu_conv1_1'](x, train=train)
         h = self['bn_relu_conv2_1'](h, train=train)
-        x = h + WideResBlock.concatenate_zero_pad(x, h)
+        x = h + WideResBlock.concatenate_zero_pad(self.maybe_pooling(x), h.data.shape, h.volatile, type(h.data))
         for i in six.moves.range(2, self.n + 1):
             h = self['bn_relu_conv1_{}'.format(i)](x, train=train)
             x = self['bn_relu_conv2_{}'.format(i)](h, train=train) + x
@@ -78,13 +88,13 @@ class WideResidualNetwork(nutszebra_chainer.Model):
     def __init__(self, category_num, block_num=3, out_channels=(16 * 4, 32 * 4, 64 * 4), N=(13, 13, 13)):
         super(WideResidualNetwork, self).__init__()
         # conv
-        modules = [('conv1', L.Convolution2D(3, 16, 7, 2, 3))]
-        in_channel = 16
-        for i, out_channel, n in six.moves.zip(six.moves.range(1, block_num + 1), out_channels, N):
-            modules.append(('wide_res_block{}'.format(i), WideResBlock(in_channel, out_channel, n=n)))
+        modules = [('conv1', L.Convolution2D(3, out_channels[0], 7, 2, 3))]
+        in_channel = out_channels[0]
+        strides = [1] + [2] * (block_num - 1)
+        for i, out_channel, n, stride in six.moves.zip(six.moves.range(1, block_num + 1), out_channels, N, strides):
+            modules.append(('wide_res_block{}'.format(i), WideResBlock(in_channel, out_channel, n=n, stride_at_first_layer=stride)))
             in_channel = out_channel
         modules.append(('bn_relu_conv', BN_ReLU_Conv(in_channel, category_num, filter_size=(1, 1), stride=(1, 1), pad=(0, 0))))
-        modules.append(('bn', L.BatchNormalization(category_num)))
         # register layers
         [self.add_link(*link) for link in modules]
         self.modules = modules
@@ -105,8 +115,7 @@ class WideResidualNetwork(nutszebra_chainer.Model):
         h = self.conv1(x)
         for i in six.moves.range(1, self.block_num + 1):
             h = self['wide_res_block{}'.format(i)](h, train=train)
-            h = F.max_pooling_2d(h, ksize=(3, 3), stride=(2, 2), pad=(1, 1))
-        h = F.relu(self.bn(self.bn_relu_conv(h, train=train), test=not train))
+        h = self.bn_relu_conv(h, train=train)
         num, categories, y, x = h.data.shape
         h = F.reshape(F.average_pooling_2d(h, (y, x)), (num, categories))
         return h
