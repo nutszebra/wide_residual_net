@@ -63,7 +63,7 @@ class WideResBlock(nutszebra_chainer.Model):
 
     def maybe_pooling(self, x):
         if self.stride_at_first_layer == 2:
-            return F.average_pooling_2d(x, 3, 2, 1)
+            return F.average_pooling_2d(x, 1, 2, 0)
         return x
 
     def __call__(self, x, train=False):
@@ -88,8 +88,8 @@ class WideResidualNetwork(nutszebra_chainer.Model):
     def __init__(self, category_num, block_num=3, out_channels=(16 * 4, 32 * 4, 64 * 4), N=(13, 13, 13)):
         super(WideResidualNetwork, self).__init__()
         # conv
-        modules = [('conv1', L.Convolution2D(3, out_channels[0], 7, 2, 3))]
-        in_channel = out_channels[0]
+        modules = [('conv1', L.Convolution2D(3, 16, 3, 1, 1))]
+        in_channel = 16
         strides = [1] + [2] * (block_num - 1)
         for i, out_channel, n, stride in six.moves.zip(six.moves.range(1, block_num + 1), out_channels, N, strides):
             modules.append(('wide_res_block{}'.format(i), WideResBlock(in_channel, out_channel, n=n, stride_at_first_layer=stride)))
