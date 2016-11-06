@@ -8,25 +8,23 @@ Implementation of Wide Residual Networks (WRN) by chainer
     git clone https://github.com/nutszebra/trainer.git
 
 # How to run
-    python main.py -p ./ -e 200 -b 128 -g 0 -s 1 -trb 4 -teb 4 -lr 0.1 -k 8 -n 16
+    python main.py -g 0
 
 # Details about my implementation
 All hyperparameters and network architecture are the same as in [[1]][Paper] except for data-augmentation.  
 * Data augmentation  
-Train: Pictures are randomly resized in the range of [28, 36], then 26x26 patches are extracted randomly and are normalized locally. Horizontal flipping is applied with 0.5 probability.  
-Test: Pictures are randomly resized to 32x32, then they are normalized locally. Single image test is used to calculate total accuracy.  
+Train: Pictures are randomly resized in the range of [32, 36], then 32x32 patches are extracted randomly and are normalized locally. Horizontal flipping is applied with 0.5 probability.  
+Test: Pictures are resized to 32x32, then they are normalized locally. Single image test is used to calculate total accuracy.  
 
 # Cifar10 result
-In WRN [[1]][Paper], ZCA whitening is used for preprocessing. I assume that 0.86% total accuracy difference between my implementation and [[1]][Paper] is caused by ZCA whitening.
-
 | network           | depth | k  | total accuracy (%) |
 |:------------------|-------|----|-------------------:|
 | WRN [[1]][Paper]  | 16    | 8  | 95.19              |
-| my implementation | 16    | 8  | 94.33              |
+| my implementation | 16    | 8  | 95.83              |
 | WRN [[1]][Paper]  | 28    | 10 | 95.83              |
 
-<img src="https://github.com/nutszebra/wide_residual_net/blob/master/img/loss.jpg" alt="loss" title="loss">
-<img src="https://github.com/nutszebra/wide_residual_net/blob/master/img/accuracy.jpg" alt="total accuracy" title="total accuracy">
+<img src="https://github.com/nutszebra/wide_residual_net/blob/master/loss.jpg" alt="loss" title="loss">
+<img src="https://github.com/nutszebra/wide_residual_net/blob/master/accuracy.jpg" alt="total accuracy" title="total accuracy">
 
 # References
 Wide Residual Networks [[1]][Paper]
