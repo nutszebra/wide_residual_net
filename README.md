@@ -5,7 +5,8 @@ Implementation of Wide Residual Networks (WRN) by chainer
 
     git clone https://github.com/nutszebra/wide_residual_net.git
     cd wide_residual_net
-    git clone https://github.com/nutszebra/trainer.git
+    git submodule init
+    git submodule update
 
 # How to run
     python main.py -g 0
