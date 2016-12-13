@@ -21,7 +21,7 @@ Test: Pictures are resized to 32x32, then they are normalized locally. Single im
 | network           | depth | k  | total accuracy (%) |
 |:------------------|-------|----|-------------------:|
 | WRN [[1]][Paper]  | 16    | 8  | 95.19              |
-| my implementation | 16    | 8  | 95.83              |
+| my implementation | 32    | 8  | 95.83              |
 | WRN [[1]][Paper]  | 28    | 10 | 95.83              |
 
 <img src="https://github.com/nutszebra/wide_residual_net/blob/master/loss.jpg" alt="loss" title="loss">
