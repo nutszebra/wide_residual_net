@@ -43,10 +43,10 @@ if __name__ == '__main__':
                         default=0.1,
                         help='leraning rate')
     parser.add_argument('--k', '-k', type=int,
-                        default=8,
+                        default=10,
                         help='width hyperparameter')
     parser.add_argument('--N', '-n', type=int,
-                        default=32,
+                        default=28,
                         help='total layers')
 
     args = parser.parse_args().__dict__
