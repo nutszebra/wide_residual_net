@@ -20,9 +20,9 @@ Test: Pictures are resized to 32x32, then they are normalized locally. Single im
 # Cifar10 result
 | network           | depth | k  | total accuracy (%) |
 |:------------------|-------|----|-------------------:|
-| WRN [[1]][Paper]  | 16    | 8  | 95.19              |
+| WRN [[1]][Paper]  | 16    | 8  | 95.4               |
 | my implementation | 32    | 8  | 95.83              |
-| WRN [[1]][Paper]  | 28    | 10 | 95.83              |
+| WRN [[1]][Paper]  | 28    | 10 | 96.0               |
 
 <img src="https://github.com/nutszebra/wide_residual_net/blob/master/loss.jpg" alt="loss" title="loss">
 <img src="https://github.com/nutszebra/wide_residual_net/blob/master/accuracy.jpg" alt="total accuracy" title="total accuracy">
