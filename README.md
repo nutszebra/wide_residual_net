@@ -22,10 +22,16 @@ Test: Pictures are resized to 32x32, then they are normalized locally. Single im
 |:------------------|-------|----|-------------------:|
 | WRN [[1]][Paper]  | 16    | 8  | 95.4               |
 | my implementation | 32    | 8  | 95.83              |
+| my implementation | 28    | 10 | 95.76              |
 | WRN [[1]][Paper]  | 28    | 10 | 96.0               |
 
+* depth=32, k=8
 <img src="https://github.com/nutszebra/wide_residual_net/blob/master/loss.jpg" alt="loss" title="loss">
 <img src="https://github.com/nutszebra/wide_residual_net/blob/master/accuracy.jpg" alt="total accuracy" title="total accuracy">
+
+* depth=28, k=10
+<img src="https://github.com/nutszebra/wide_residual_net/blob/master/loss2.jpg" alt="loss" title="loss">
+<img src="https://github.com/nutszebra/wide_residual_net/blob/master/accuracy2.jpg" alt="total accuracy" title="total accuracy">
 
 # References
 Wide Residual Networks [[1]][Paper]
