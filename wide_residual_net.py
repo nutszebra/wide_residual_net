@@ -145,3 +145,21 @@ class WideResidualNetwork(nutszebra_chainer.Model):
         for i in indices:
             false_accuracy[(t.data[i], false_y[i])] += 1
         return accuracy, false_accuracy
+
+    @staticmethod
+    def accuracy_n(y, t, xp=np, n=5):
+        y.to_cpu()
+        t.to_cpu()
+        accuracy = defaultdict(int)
+        accuracy5 = defaultdict(int)
+        for i, label in enumerate(np.argsort(y.data, axis=1)):
+            if t.data[i] == label[-1]:
+                accuracy[t.data[i]] += 1
+            if t.data[i] in label[-n:]:
+                accuracy5[t.data[i]] += 1
+        indices = np.where((t.data == np.argmax(y.data, axis=1)) == False)[0]
+        false_accuracy = defaultdict(int)
+        false_y = np.argmax(y.data, axis=1)
+        for i in indices:
+            false_accuracy[(t.data[i], false_y[i])] += 1
+        return accuracy, accuracy5, false_accuracy
