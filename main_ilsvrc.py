@@ -59,7 +59,7 @@ if __name__ == '__main__':
     N = args.pop('N')
 
     print('generating model')
-    model = wide_residual_net.WideResidualNetwork(10, block_num=3, out_channels=(16 * k, 32 * k, 64 * k), N=(int(N / 3. / 2.), int(N / 3. / 2.), int(N / 3. / 2.)))
+    model = wide_residual_net.WideResidualNetwork(1000, block_num=3, out_channels=(16 * k, 32 * k, 64 * k), N=(int(N / 3. / 2.), int(N / 3. / 2.), int(N / 3. / 2.)))
     print('Done')
     optimizer = nutszebra_optimizer.OptimizerGooglenetV3(model, lr=lr)
     args['model'] = model
