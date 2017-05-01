@@ -64,6 +64,6 @@ if __name__ == '__main__':
     optimizer = nutszebra_optimizer.OptimizerGooglenetV3(model, lr=lr)
     args['model'] = model
     args['optimizer'] = optimizer
-    args['da'] = da.DataAugmentationNormalizeBigger
+    args['da'] = da.DataAugmentationNormalizeBig
     main = nutszebra_ilsvrc_object_localization.TrainIlsvrcObjectLocalizationClassification(**args)
     main.run()
